@@ -2,13 +2,13 @@ import { useState, useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Search, User, MessageSquare, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useDebounce } from "@/hooks/use-debounce"; // We might need to create this hook or implement debounce manually
 
 const GlobalSearch = () => {
-    const navigate = useNavigate();
+    const router = useRouter();
     const [query, setQuery] = useState("");
     const [results, setResults] = useState<{ users: any[], posts: any[] }>({ users: [], posts: [] });
     const [loading, setLoading] = useState(false);
@@ -72,7 +72,7 @@ const GlobalSearch = () => {
     };
 
     const handleSelectUser = (userId: string) => {
-        navigate(`/profile/${userId}`);
+        router.push(`/profile/${userId}`);
         setIsOpen(false);
         setQuery("");
     };
@@ -80,7 +80,7 @@ const GlobalSearch = () => {
     const handleSelectPost = (postId: string) => {
         // Navigate to post details (if we had a post details page) or just community for now
         // Ideally: navigate(`/post/${postId}`)
-        navigate(`/community`);
+        router.push(`/community`);
         setIsOpen(false);
         setQuery("");
     };

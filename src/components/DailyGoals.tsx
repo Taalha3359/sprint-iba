@@ -14,14 +14,18 @@ interface Goal {
 }
 
 const DailyGoals = () => {
-    const [goals, setGoals] = useState<Goal[]>(() => {
+    const [goals, setGoals] = useState<Goal[]>([
+        { id: 1, text: "Complete 1 Vocab Sprint", done: false },
+        { id: 2, text: "Solve 5 Math Problems", done: false },
+        { id: 3, text: "Read 1 English Article", done: false },
+    ]);
+
+    useEffect(() => {
         const saved = localStorage.getItem("dailyGoals");
-        return saved ? JSON.parse(saved) : [
-            { id: 1, text: "Complete 1 Vocab Sprint", done: false },
-            { id: 2, text: "Solve 5 Math Problems", done: false },
-            { id: 3, text: "Read 1 English Article", done: false },
-        ];
-    });
+        if (saved) {
+            setGoals(JSON.parse(saved));
+        }
+    }, []);
     const [newGoal, setNewGoal] = useState("");
 
     useEffect(() => {

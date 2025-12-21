@@ -8,12 +8,12 @@ import {
 } from "@/components/ui/accordion";
 import { BookOpen, Calculator, Languages, Brain, ChevronRight, ChevronLeft, LayoutDashboard, Users, Trophy, Calendar } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useRouter, usePathname } from "next/navigation";
 
 const Sidebar = () => {
     const [isOpen, setIsOpen] = useState(true);
-    const navigate = useNavigate();
-    const location = useLocation();
+    const router = useRouter();
+    const pathname = usePathname();
 
     return (
         <div
@@ -34,21 +34,21 @@ const Sidebar = () => {
 
             {/* Navigation Links */}
             <div className="px-3 mt-16 space-y-1">
-                {location.pathname !== '/dashboard' && (
+                {pathname !== '/dashboard' && (
                     <Button
                         variant="ghost"
                         className={cn("w-full justify-start text-muted-foreground hover:text-foreground", !isOpen && "justify-center px-0")}
-                        onClick={() => navigate('/dashboard')}
+                        onClick={() => router.push('/dashboard')}
                     >
                         <LayoutDashboard className={cn("w-4 h-4", isOpen && "mr-2")} />
                         {isOpen && "Dashboard"}
                     </Button>
                 )}
-                {location.pathname !== '/community' && (
+                {pathname !== '/community' && (
                     <Button
                         variant="ghost"
                         className={cn("w-full justify-start text-muted-foreground hover:text-foreground", !isOpen && "justify-center px-0")}
-                        onClick={() => navigate('/community')}
+                        onClick={() => router.push('/community')}
                     >
                         <Users className={cn("w-4 h-4", isOpen && "mr-2")} />
                         {isOpen && "Community"}
@@ -58,7 +58,7 @@ const Sidebar = () => {
                 <Button
                     variant="ghost"
                     className={cn("w-full justify-start text-accent hover:text-accent/80", !isOpen && "justify-center px-0")}
-                    onClick={() => navigate('/study-plan')}
+                    onClick={() => router.push('/study-plan')}
                 >
                     <Calendar className={cn("w-4 h-4", isOpen && "mr-2")} />
                     {isOpen && "Study Plan"}
@@ -67,7 +67,7 @@ const Sidebar = () => {
                 <Button
                     variant="ghost"
                     className={cn("w-full justify-start text-emerald-500 hover:text-emerald-400 font-bold mt-2", !isOpen && "justify-center px-0")}
-                    onClick={() => navigate('/game')}
+                    onClick={() => router.push('/game')}
                 >
                     <Trophy className={cn("w-4 h-4", isOpen && "mr-2")} />
                     {isOpen && "VocabPoly"}
@@ -96,7 +96,7 @@ const Sidebar = () => {
                                         variant="ghost"
                                         size="sm"
                                         className="justify-start font-normal h-8"
-                                        onClick={() => navigate('/resources/math')}
+                                        onClick={() => router.push('/resources/math')}
                                     >
                                         <Calculator className="w-3 h-3 mr-2 text-blue-500" />
                                         Math
@@ -105,7 +105,7 @@ const Sidebar = () => {
                                         variant="ghost"
                                         size="sm"
                                         className="justify-start font-normal h-8"
-                                        onClick={() => navigate('/resources/english')}
+                                        onClick={() => router.push('/resources/english')}
                                     >
                                         <Languages className="w-3 h-3 mr-2 text-green-500" />
                                         English
@@ -114,7 +114,7 @@ const Sidebar = () => {
                                         variant="ghost"
                                         size="sm"
                                         className="justify-start font-normal h-8"
-                                        onClick={() => navigate('/resources/analytical')}
+                                        onClick={() => router.push('/resources/analytical')}
                                     >
                                         <Brain className="w-3 h-3 mr-2 text-purple-500" />
                                         Analytical

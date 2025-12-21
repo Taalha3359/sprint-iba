@@ -1,0 +1,149 @@
+
+> sprint-iba-clone@0.0.0 build
+> next build
+
+⚠ `eslint` configuration in next.config.mjs is no longer supported. See more info here: https://nextjs.org/docs/app/api-reference/cli/next#next-lint-options
+⚠ Invalid next.config.mjs options detected: 
+⚠     Unrecognized key(s) in object: 'eslint'
+⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
+▲ Next.js 16.1.0 (Turbopack)
+- Environments: .env.local
+- Experiments (use with caution):
+  ✓ parallelServerBuildTraces
+  ✓ parallelServerCompiles
+  ✓ webpackBuildWorker
+
+  Creating an optimized production build ...
+
+> Build error occurred
+Error: Turbopack build failed with 6 errors:
+./src/app/math-game/components/BattleView.tsx:1:17
+Ecmascript file had an error
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m [33mReact[39m[33m,[39m { useState } [36mfrom[39m [32m'react'[39m[33m;[39m
+ [90m   |[39m                 [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m { [33mBattleState[39m } [36mfrom[39m [32m'../types/index'[39m[33m;[39m
+ [90m 3 |[39m [36mimport[39m { [33mButton[39m } [36mfrom[39m [32m"@/components/ui/button"[39m[33m;[39m
+ [90m 4 |[39m [36mimport[39m { [33mProgress[39m } [36mfrom[39m [32m"@/components/ui/progress"[39m[33m;[39m[0m
+
+You're importing a component that needs `useState`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+
+
+Import trace:
+  Server Component:
+    ./src/app/math-game/components/BattleView.tsx
+    ./src/app/math-game/components/GameEngine.tsx
+    ./src/app/math-game/page.tsx
+
+
+./src/app/math-game/components/GameEngine.tsx:1:27
+Ecmascript file had an error
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m [33mReact[39m[33m,[39m { useState[33m,[39m useEffect[33m,[39m useCallback } [36mfrom[39m [32m'react'[39m[33m;[39m
+ [90m   |[39m                           [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m { [33mGameMap[39m[33m,[39m [33mPlayerState[39m[33m,[39m [33mPosition[39m[33m,[39m [33mDirection[39m[33m,[39m [33mGameMode[39m[33m,[39m [33mBattleState[39m[33m,[39m [33mPokemon[39m[33m,[39m [33mQuestState[39m } [36mfrom[39m [32m'../types/index'[39m[33m;[39m
+ [90m 3 |[39m [36mimport[39m { [33mINITIAL_MAP[39m } [36mfrom[39m [32m'../data/maps'[39m[33m;[39m
+ [90m 4 |[39m [36mimport[39m [33mMapView[39m [36mfrom[39m [32m'./MapView'[39m[33m;[39m[0m
+
+You're importing a component that needs `useEffect`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+
+
+Import trace:
+  Server Component:
+    ./src/app/math-game/components/GameEngine.tsx
+    ./src/app/math-game/page.tsx
+
+
+./src/app/math-game/components/GameEngine.tsx:1:17
+Ecmascript file had an error
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m [33mReact[39m[33m,[39m { useState[33m,[39m useEffect[33m,[39m useCallback } [36mfrom[39m [32m'react'[39m[33m;[39m
+ [90m   |[39m                 [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m { [33mGameMap[39m[33m,[39m [33mPlayerState[39m[33m,[39m [33mPosition[39m[33m,[39m [33mDirection[39m[33m,[39m [33mGameMode[39m[33m,[39m [33mBattleState[39m[33m,[39m [33mPokemon[39m[33m,[39m [33mQuestState[39m } [36mfrom[39m [32m'../types/index'[39m[33m;[39m
+ [90m 3 |[39m [36mimport[39m { [33mINITIAL_MAP[39m } [36mfrom[39m [32m'../data/maps'[39m[33m;[39m
+ [90m 4 |[39m [36mimport[39m [33mMapView[39m [36mfrom[39m [32m'./MapView'[39m[33m;[39m[0m
+
+You're importing a component that needs `useState`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+
+
+Import trace:
+  Server Component:
+    ./src/app/math-game/components/GameEngine.tsx
+    ./src/app/math-game/page.tsx
+
+
+./src/app/math-game/components/MapView.tsx:1:17
+Ecmascript file had an error
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m [33mReact[39m[33m,[39m { useEffect[33m,[39m useRef[33m,[39m useState } [36mfrom[39m [32m'react'[39m[33m;[39m
+ [90m   |[39m                 [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m { [33mGameMap[39m[33m,[39m [33mPosition[39m[33m,[39m [33mDirection[39m[33m,[39m [33mGameEvent[39m } [36mfrom[39m [32m'../types/index'[39m[33m;[39m
+ [90m 3 |[39m
+ [90m 4 |[39m [36minterface[39m [33mMapViewProps[39m {[0m
+
+You're importing a component that needs `useEffect`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+
+
+Import trace:
+  Server Component:
+    ./src/app/math-game/components/MapView.tsx
+    ./src/app/math-game/components/GameEngine.tsx
+    ./src/app/math-game/page.tsx
+
+
+./src/app/math-game/components/MapView.tsx:1:28
+Ecmascript file had an error
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m [33mReact[39m[33m,[39m { useEffect[33m,[39m useRef[33m,[39m useState } [36mfrom[39m [32m'react'[39m[33m;[39m
+ [90m   |[39m                            [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m { [33mGameMap[39m[33m,[39m [33mPosition[39m[33m,[39m [33mDirection[39m[33m,[39m [33mGameEvent[39m } [36mfrom[39m [32m'../types/index'[39m[33m;[39m
+ [90m 3 |[39m
+ [90m 4 |[39m [36minterface[39m [33mMapViewProps[39m {[0m
+
+You're importing a component that needs `useRef`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+
+
+Import trace:
+  Server Component:
+    ./src/app/math-game/components/MapView.tsx
+    ./src/app/math-game/components/GameEngine.tsx
+    ./src/app/math-game/page.tsx
+
+
+./src/app/math-game/components/MapView.tsx:1:36
+Ecmascript file had an error
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m [33mReact[39m[33m,[39m { useEffect[33m,[39m useRef[33m,[39m useState } [36mfrom[39m [32m'react'[39m[33m;[39m
+ [90m   |[39m                                    [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m { [33mGameMap[39m[33m,[39m [33mPosition[39m[33m,[39m [33mDirection[39m[33m,[39m [33mGameEvent[39m } [36mfrom[39m [32m'../types/index'[39m[33m;[39m
+ [90m 3 |[39m
+ [90m 4 |[39m [36minterface[39m [33mMapViewProps[39m {[0m
+
+You're importing a component that needs `useState`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+
+
+Import trace:
+  Server Component:
+    ./src/app/math-game/components/MapView.tsx
+    ./src/app/math-game/components/GameEngine.tsx
+    ./src/app/math-game/page.tsx
+
+
+    at <unknown> (./src/app/math-game/components/BattleView.tsx:1:17)
+    at <unknown> (./src/app/math-game/components/GameEngine.tsx:1:27)
+    at <unknown> (./src/app/math-game/components/GameEngine.tsx:1:17)
+    at <unknown> (./src/app/math-game/components/MapView.tsx:1:17)
+    at <unknown> (./src/app/math-game/components/MapView.tsx:1:28)
+    at <unknown> (./src/app/math-game/components/MapView.tsx:1:36)
