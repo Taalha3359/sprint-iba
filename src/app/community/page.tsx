@@ -31,7 +31,7 @@ interface Post {
 }
 
 const Community = () => {
-    const { user, signOut } = useAuth();
+    const { user, loading: authLoading, signOut } = useAuth();
     const router = useRouter();
     const [newPost, setNewPost] = useState("");
     const [posts, setPosts] = useState<Post[]>([]);
@@ -39,7 +39,15 @@ const Community = () => {
     const [posting, setPosting] = useState(false);
 
     useEffect(() => {
-        fetchPosts();
+        if (!authLoading && !user) {
+            router.push("/auth");
+        }
+    }, [user, authLoading, router]);
+
+    useEffect(() => {
+        if (user) {
+            fetchPosts();
+        }
     }, [user]);
 
     const fetchPosts = async () => {
@@ -82,6 +90,8 @@ const Community = () => {
 
     const handleSignOut = async () => {
         await signOut();
+        toast.success("Signed out successfully");
+        router.push("/auth");
     };
 
     const handleCreatePost = async () => {

@@ -6,14 +6,23 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion";
-import { BookOpen, Calculator, Languages, Brain, ChevronRight, ChevronLeft, LayoutDashboard, Users, Trophy, Calendar } from "lucide-react";
+import { BookOpen, Calculator, Languages, Brain, ChevronRight, ChevronLeft, LayoutDashboard, Users, Trophy, Calendar, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useRouter, usePathname } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "sonner";
 
 const Sidebar = () => {
     const [isOpen, setIsOpen] = useState(true);
     const router = useRouter();
     const pathname = usePathname();
+    const { signOut } = useAuth();
+
+    const handleSignOut = async () => {
+        await signOut();
+        toast.success("Signed out successfully");
+        router.push("/auth");
+    };
 
     return (
         <div
@@ -124,6 +133,18 @@ const Sidebar = () => {
                         )}
                     </AccordionItem>
                 </Accordion>
+            </div>
+
+            {/* Sign Out Section */}
+            <div className="p-4 border-t border-border/40">
+                <Button
+                    variant="ghost"
+                    className={cn("w-full justify-start text-muted-foreground hover:text-destructive hover:bg-destructive/10", !isOpen && "justify-center px-0")}
+                    onClick={handleSignOut}
+                >
+                    <LogOut className={cn("w-4 h-4", isOpen && "mr-2")} />
+                    {isOpen && "Sign Out"}
+                </Button>
             </div>
         </div>
     );

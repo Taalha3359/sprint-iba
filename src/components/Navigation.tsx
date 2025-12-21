@@ -5,8 +5,11 @@ import { Zap } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
+import { useAuth } from "@/contexts/AuthContext";
+
 const Navigation = () => {
   const router = useRouter();
+  const { user, loading } = useAuth();
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border/40 bg-background/80 backdrop-blur-xl">
@@ -37,12 +40,20 @@ const Navigation = () => {
 
           {/* CTA Buttons */}
           <div className="flex items-center gap-4">
-            <Button variant="ghost" className="hidden sm:inline-flex hover:text-accent" onClick={() => router.push('/auth')}>
-              Sign In
-            </Button>
-            <Button className="gradient-primary text-primary-foreground hover:shadow-accent transition-all duration-300" onClick={() => router.push('/auth')}>
-              Get Started
-            </Button>
+            {!loading && user ? (
+              <Button className="gradient-primary text-primary-foreground hover:shadow-accent transition-all duration-300" onClick={() => router.push('/dashboard')}>
+                Dashboard
+              </Button>
+            ) : (
+              <>
+                <Button variant="ghost" className="hidden sm:inline-flex hover:text-accent" onClick={() => router.push('/auth')}>
+                  Sign In
+                </Button>
+                <Button className="gradient-primary text-primary-foreground hover:shadow-accent transition-all duration-300" onClick={() => router.push('/auth')}>
+                  Get Started
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </div>

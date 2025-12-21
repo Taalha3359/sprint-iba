@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 
 export const dynamic = 'force-dynamic';
@@ -7,7 +8,7 @@ export const fetchCache = 'force-no-store';
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Trophy, Target, Zap, Users, BookOpen, User as UserIcon, Sparkles } from "lucide-react";
+import { Trophy, Target, Zap, Users, BookOpen, User as UserIcon, Sparkles, LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
 import DailyGoals from "@/components/DailyGoals";
 import Notifications from "@/components/Notifications";
@@ -26,8 +27,14 @@ import { useVelocityPoints } from "@/hooks/useVelocityPoints";
 import { formatVPFull } from "@/utils/vpCalculations";
 
 const Dashboard = () => {
-    const { user, signOut } = useAuth();
+    const { user, loading: authLoading, signOut } = useAuth();
     const router = useRouter();
+
+    useEffect(() => {
+        if (!authLoading && !user) {
+            router.push("/auth");
+        }
+    }, [user, authLoading, router]);
     const {
         totalVp,
         currentLevel,
@@ -39,6 +46,7 @@ const Dashboard = () => {
 
     const handleSignOut = async () => {
         await signOut();
+        router.push("/auth");
     };
 
     return (
@@ -84,6 +92,14 @@ const Dashboard = () => {
                                         >
                                             <UserIcon className="w-4 h-4 mr-2" />
                                             View Profile
+                                        </Button>
+                                        <Button
+                                            variant="ghost"
+                                            className="w-full justify-start text-destructive hover:text-destructive hover:bg-destructive/10"
+                                            onClick={handleSignOut}
+                                        >
+                                            <LogOut className="w-4 h-4 mr-2" />
+                                            Sign Out
                                         </Button>
                                     </HoverCardContent>
                                 </HoverCard>

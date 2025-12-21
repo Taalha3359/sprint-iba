@@ -26,8 +26,14 @@ interface Post {
 }
 
 const Profile = () => {
-    const { user, signOut } = useAuth();
+    const { user, loading: authLoading, signOut } = useAuth();
     const router = useRouter();
+
+    useEffect(() => {
+        if (!authLoading && !user) {
+            router.push("/auth");
+        }
+    }, [user, authLoading, router]);
     const { totalVp, currentLevel, loading: loadingVP } = useVelocityPoints();
     const [loading, setLoading] = useState(false);
     const [isEditing, setIsEditing] = useState(false);

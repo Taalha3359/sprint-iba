@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,15 +11,34 @@ import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import { Zap } from "lucide-react";
 import { z } from "zod";
+import { supabase } from "@/integrations/supabase/client";
 
 const emailSchema = z.string().email("Please enter a valid email address");
 const passwordSchema = z.string().min(6, "Password must be at least 6 characters");
 const nameSchema = z.string().min(2, "Name must be at least 2 characters").max(100, "Name must be less than 100 characters");
 
 const Auth = () => {
-    const { signIn, signUp, signInWithGoogle } = useAuth();
+    const { user, loading, signIn, signUp, signInWithGoogle } = useAuth();
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
+
+    useEffect(() => {
+        // 1. Check if we already have a user
+        if (!loading && user) {
+            router.replace("/community");
+            return;
+        }
+
+        // 2. Listen for the moment Supabase processes the URL hash
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+            if (event === "SIGNED_IN" && session) {
+                router.replace("/community");
+            }
+        });
+
+        return () => subscription.unsubscribe();
+    }, [user, loading, router]);
+
 
     // Sign In State
     const [signInEmail, setSignInEmail] = useState("");
@@ -98,6 +117,10 @@ const Auth = () => {
             toast.error(error.message || "Failed to sign in with Google");
         }
     };
+
+    if (loading) {
+        return null;
+    }
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-primary/5 p-4">
