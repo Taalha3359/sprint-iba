@@ -1,68 +1,76 @@
-import { useState, useEffect, useRef } from "react";
-import { Input } from "@/components/ui/input";
-import { Search, User, MessageSquare, Loader2 } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+"use client";
+
+import * as React from "react";
+import {
+    Calculator,
+    Calendar,
+    CreditCard,
+    Settings,
+    Smile,
+    User,
+    Search,
+    Loader2,
+    FileText,
+    Users
+} from "lucide-react";
 import { useRouter } from "next/navigation";
+import { supabase } from "@/integrations/supabase/client";
+
+import {
+    CommandDialog,
+    CommandEmpty,
+    CommandGroup,
+    CommandInput,
+    CommandItem,
+    CommandList,
+    CommandSeparator,
+    CommandShortcut,
+} from "@/components/ui/command";
+import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { useDebounce } from "@/hooks/use-debounce"; // We might need to create this hook or implement debounce manually
 
-const GlobalSearch = () => {
+export default function GlobalSearch() {
+    const [open, setOpen] = React.useState(false);
+    const [query, setQuery] = React.useState("");
+    const [results, setResults] = React.useState<{ users: any[], posts: any[] }>({ users: [], posts: [] });
+    const [loading, setLoading] = React.useState(false);
     const router = useRouter();
-    const [query, setQuery] = useState("");
-    const [results, setResults] = useState<{ users: any[], posts: any[] }>({ users: [], posts: [] });
-    const [loading, setLoading] = useState(false);
-    const [isOpen, setIsOpen] = useState(false);
-    const containerRef = useRef<HTMLDivElement>(null);
 
-    // Debounce logic
-    const [debouncedQuery, setDebouncedQuery] = useState(query);
-    useEffect(() => {
-        const handler = setTimeout(() => {
-            setDebouncedQuery(query);
-        }, 300);
-        return () => clearTimeout(handler);
-    }, [query]);
-
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-                setIsOpen(false);
+    React.useEffect(() => {
+        const down = (e: KeyboardEvent) => {
+            if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
+                e.preventDefault();
+                setOpen((open) => !open);
             }
         };
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => document.removeEventListener("mousedown", handleClickOutside);
+
+        document.addEventListener("keydown", down);
+        return () => document.removeEventListener("keydown", down);
     }, []);
 
-    useEffect(() => {
-        if (debouncedQuery.trim().length > 2) {
-            performSearch();
+    React.useEffect(() => {
+        if (query.length > 2) {
+            const timer = setTimeout(() => {
+                performSearch();
+            }, 300);
+            return () => clearTimeout(timer);
         } else {
             setResults({ users: [], posts: [] });
         }
-    }, [debouncedQuery]);
+    }, [query]);
 
     const performSearch = async () => {
         setLoading(true);
-        setIsOpen(true);
         try {
-            // Search Users
             const { data: users } = await supabase
                 .from('profiles')
                 .select('id, full_name, avatar_url')
-                .ilike('full_name', `%${debouncedQuery}%`)
-                .limit(5);
-
-            // Search Posts
-            const { data: posts } = await supabase
-                .from('posts')
-                .select('id, content, created_at, user:user_id(full_name)')
-                .ilike('content', `%${debouncedQuery}%`)
+                .ilike('full_name', `%${query}%`)
                 .limit(5);
 
             setResults({
                 users: users || [],
-                posts: posts || []
+                posts: []
             });
         } catch (error) {
             console.error("Search error:", error);
@@ -71,85 +79,74 @@ const GlobalSearch = () => {
         }
     };
 
-    const handleSelectUser = (userId: string) => {
-        router.push(`/profile/${userId}`);
-        setIsOpen(false);
-        setQuery("");
-    };
-
-    const handleSelectPost = (postId: string) => {
-        // Navigate to post details (if we had a post details page) or just community for now
-        // Ideally: navigate(`/post/${postId}`)
-        router.push(`/community`);
-        setIsOpen(false);
-        setQuery("");
-    };
+    const runCommand = React.useCallback((command: () => unknown) => {
+        setOpen(false);
+        command();
+    }, []);
 
     return (
-        <div className="relative w-full max-w-md" ref={containerRef}>
-            <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input
-                    placeholder="Search users or threads..."
-                    className="pl-9 bg-muted/50 border-0 focus-visible:ring-1 focus-visible:ring-primary"
+        <>
+            <Button
+                variant="outline"
+                className="relative h-9 w-full justify-start rounded-[0.5rem] bg-muted/50 text-sm font-normal text-muted-foreground shadow-none sm:pr-12 md:w-40 lg:w-64"
+                onClick={() => setOpen(true)}
+            >
+                <span className="hidden lg:inline-flex">Search...</span>
+                <span className="inline-flex lg:hidden">Search...</span>
+                <kbd className="pointer-events-none absolute right-[0.3rem] top-[0.3rem] hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
+                    <span className="text-xs">⌘</span>K
+                </kbd>
+            </Button>
+            <CommandDialog open={open} onOpenChange={setOpen}>
+                <CommandInput
+                    placeholder="Type a command or search..."
                     value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                    onFocus={() => {
-                        if (results.users.length > 0 || results.posts.length > 0) setIsOpen(true);
-                    }}
+                    onValueChange={setQuery}
                 />
-                {loading && (
-                    <Loader2 className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 animate-spin text-muted-foreground" />
-                )}
-            </div>
+                <CommandList>
+                    <CommandEmpty>No results found.</CommandEmpty>
 
-            {isOpen && (results.users.length > 0 || results.posts.length > 0) && (
-                <div className="absolute top-full left-0 right-0 mt-2 bg-card border border-border/40 rounded-lg shadow-lg z-50 overflow-hidden">
-                    <ScrollArea className="max-h-[400px]">
-                        {results.users.length > 0 && (
-                            <div className="p-2">
-                                <h3 className="text-xs font-semibold text-muted-foreground px-2 py-1 mb-1">People</h3>
-                                {results.users.map(user => (
-                                    <div
-                                        key={user.id}
-                                        className="flex items-center gap-3 p-2 hover:bg-muted/50 rounded-md cursor-pointer"
-                                        onClick={() => handleSelectUser(user.id)}
-                                    >
-                                        <Avatar className="w-8 h-8">
-                                            <AvatarImage src={user.avatar_url} />
-                                            <AvatarFallback>{user.full_name?.charAt(0)}</AvatarFallback>
-                                        </Avatar>
-                                        <span className="text-sm font-medium">{user.full_name}</span>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
+                    {loading && <div className="p-4 flex justify-center"><Loader2 className="animate-spin w-4 h-4" /></div>}
 
-                        {results.users.length > 0 && results.posts.length > 0 && <div className="h-px bg-border/40 mx-2" />}
+                    {!query && (
+                        <>
+                            <CommandGroup heading="Suggestions">
+                                <CommandItem onSelect={() => runCommand(() => router.push("/dashboard"))}>
+                                    <Calendar className="mr-2 h-4 w-4" />
+                                    <span>Dashboard</span>
+                                </CommandItem>
+                                <CommandItem onSelect={() => runCommand(() => router.push("/profile"))}>
+                                    <User className="mr-2 h-4 w-4" />
+                                    <span>Profile</span>
+                                </CommandItem>
+                                <CommandItem onSelect={() => runCommand(() => router.push("/resources"))}>
+                                    <FileText className="mr-2 h-4 w-4" />
+                                    <span>Resources</span>
+                                </CommandItem>
+                                <CommandItem onSelect={() => runCommand(() => router.push("/groups"))}>
+                                    <Users className="mr-2 h-4 w-4" />
+                                    <span>Groups</span>
+                                </CommandItem>
+                            </CommandGroup>
+                            <CommandSeparator />
+                        </>
+                    )}
 
-                        {results.posts.length > 0 && (
-                            <div className="p-2">
-                                <h3 className="text-xs font-semibold text-muted-foreground px-2 py-1 mb-1">Threads</h3>
-                                {results.posts.map(post => (
-                                    <div
-                                        key={post.id}
-                                        className="flex items-start gap-3 p-2 hover:bg-muted/50 rounded-md cursor-pointer"
-                                        onClick={() => handleSelectPost(post.id)}
-                                    >
-                                        <MessageSquare className="w-4 h-4 mt-1 text-muted-foreground" />
-                                        <div className="flex-1 overflow-hidden">
-                                            <p className="text-sm truncate">{post.content}</p>
-                                            <p className="text-xs text-muted-foreground">by {post.user?.full_name}</p>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                    </ScrollArea>
-                </div>
-            )}
-        </div>
+                    {results.users.length > 0 && (
+                        <CommandGroup heading="People">
+                            {results.users.map((user) => (
+                                <CommandItem key={user.id} onSelect={() => runCommand(() => router.push(`/profile/${user.id}`))}>
+                                    <Avatar className="mr-2 h-6 w-6">
+                                        <AvatarImage src={user.avatar_url} />
+                                        <AvatarFallback>{user.full_name?.charAt(0)}</AvatarFallback>
+                                    </Avatar>
+                                    <span>{user.full_name}</span>
+                                </CommandItem>
+                            ))}
+                        </CommandGroup>
+                    )}
+                </CommandList>
+            </CommandDialog>
+        </>
     );
-};
-
-export default GlobalSearch;
+}

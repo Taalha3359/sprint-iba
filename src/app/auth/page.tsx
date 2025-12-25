@@ -25,14 +25,14 @@ const Auth = () => {
     useEffect(() => {
         // 1. Check if we already have a user
         if (!loading && user) {
-            router.replace("/community");
+            router.replace("/dashboard");
             return;
         }
 
         // 2. Listen for the moment Supabase processes the URL hash
         const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
             if (event === "SIGNED_IN" && session) {
-                router.replace("/community");
+                router.replace("/dashboard");
             }
         });
 
@@ -73,7 +73,7 @@ const Auth = () => {
             toast.error(error.message || "Failed to sign in");
         } else {
             toast.success("Welcome back!");
-            router.push("/community");
+            router.push("/dashboard");
         }
     };
 
@@ -104,7 +104,7 @@ const Auth = () => {
             toast.error(error.message || "Failed to sign up");
         } else {
             toast.success("Account created! Welcome to Sprint IBA!");
-            router.push("/community");
+            router.push("/dashboard");
         }
     };
 

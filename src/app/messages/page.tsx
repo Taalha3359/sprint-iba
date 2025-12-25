@@ -14,7 +14,9 @@ import { useSearchParams } from "next/navigation";
 import Sidebar from "@/components/Sidebar";
 import { formatDistanceToNow } from "date-fns";
 
-const Messages = () => {
+import { Suspense } from "react";
+
+const MessagesContent = () => {
     const { user } = useAuth();
 
     const searchParams = useSearchParams();
@@ -322,6 +324,14 @@ const Messages = () => {
                 </div>
             </div>
         </div>
+    );
+};
+
+const Messages = () => {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <MessagesContent />
+        </Suspense>
     );
 };
 

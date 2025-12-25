@@ -29,7 +29,7 @@ const Hero = () => {
 
           {/* Subheading */}
           <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-            Connect with fellow aspirants, compete in interactive games, track your progress, and share knowledge in a vibrant community built for success.
+            Connect with fellow aspirants, compete in interactive games, track your progress, and share knowledge in a platform built for success.
           </p>
 
           {/* CTA Buttons */}

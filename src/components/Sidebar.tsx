@@ -1,153 +1,226 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
-} from "@/components/ui/accordion";
-import { BookOpen, Calculator, Languages, Brain, ChevronRight, ChevronLeft, LayoutDashboard, Users, Trophy, Calendar, LogOut } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { useRouter, usePathname } from "next/navigation";
-import { useAuth } from "@/contexts/AuthContext";
-import { toast } from "sonner";
+"use client"
 
-const Sidebar = () => {
-    const [isOpen, setIsOpen] = useState(true);
-    const router = useRouter();
-    const pathname = usePathname();
-    const { signOut } = useAuth();
+import * as React from "react"
+import {
+    BookOpen,
+    Bot,
+    Command,
+    Frame,
+    LifeBuoy,
+    Map,
+    PieChart,
+    Send,
+    Settings2,
+    SquareTerminal,
+    Trophy,
+    Users,
+    Zap,
+    LayoutDashboard,
+    Calendar,
+    Gamepad2,
+    Dumbbell,
+    Calculator,
+    Languages,
+    Brain,
+    LogOut,
+    User
+} from "lucide-react"
+
+import {
+    Sidebar,
+    SidebarContent,
+    SidebarFooter,
+    SidebarHeader,
+    SidebarMenu,
+    SidebarMenuButton,
+    SidebarMenuItem,
+    SidebarMenuSub,
+    SidebarMenuSubButton,
+    SidebarMenuSubItem,
+    SidebarRail,
+    SidebarGroup,
+    SidebarGroupLabel,
+    SidebarGroupContent,
+} from "@/components/ui/sidebar"
+import { usePathname, useRouter } from "next/navigation"
+import { useAuth } from "@/contexts/AuthContext"
+import { toast } from "sonner"
+
+export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+    const pathname = usePathname()
+    const router = useRouter()
+    const { signOut, user } = useAuth()
 
     const handleSignOut = async () => {
-        await signOut();
-        toast.success("Signed out successfully");
-        router.push("/auth");
-    };
+        await signOut()
+        toast.success("Signed out successfully")
+        router.push("/auth")
+    }
+
+    const isActive = (path: string) => pathname === path || pathname.startsWith(path + "/")
 
     return (
-        <div
-            className={cn(
-                "hidden md:flex flex-col border-r border-border/40 bg-background/95 backdrop-blur-xl h-screen sticky top-0 left-0 transition-all duration-300",
-                isOpen ? "w-64" : "w-20"
-            )}
-        >
-            {/* Toggle Button */}
-            <Button
-                variant="ghost"
-                size="icon"
-                className="absolute -right-3 top-6 h-6 w-6 rounded-full border border-border bg-background shadow-md z-50"
-                onClick={() => setIsOpen(!isOpen)}
-            >
-                {isOpen ? <ChevronLeft className="h-3 w-3" /> : <ChevronRight className="h-3 w-3" />}
-            </Button>
-
-            {/* Navigation Links */}
-            <div className="px-3 mt-16 space-y-1">
-                {pathname !== '/dashboard' && (
-                    <Button
-                        variant="ghost"
-                        className={cn("w-full justify-start text-muted-foreground hover:text-foreground", !isOpen && "justify-center px-0")}
-                        onClick={() => router.push('/dashboard')}
-                    >
-                        <LayoutDashboard className={cn("w-4 h-4", isOpen && "mr-2")} />
-                        {isOpen && "Dashboard"}
-                    </Button>
-                )}
-                {pathname !== '/community' && (
-                    <Button
-                        variant="ghost"
-                        className={cn("w-full justify-start text-muted-foreground hover:text-foreground", !isOpen && "justify-center px-0")}
-                        onClick={() => router.push('/community')}
-                    >
-                        <Users className={cn("w-4 h-4", isOpen && "mr-2")} />
-                        {isOpen && "Community"}
-                    </Button>
-                )}
-                {/* Study Plan Link */}
-                <Button
-                    variant="ghost"
-                    className={cn("w-full justify-start text-accent hover:text-accent/80", !isOpen && "justify-center px-0")}
-                    onClick={() => router.push('/study-plan')}
-                >
-                    <Calendar className={cn("w-4 h-4", isOpen && "mr-2")} />
-                    {isOpen && "Study Plan"}
-                </Button>
-                {/* Game Link */}
-                <Button
-                    variant="ghost"
-                    className={cn("w-full justify-start text-emerald-500 hover:text-emerald-400 font-bold mt-2", !isOpen && "justify-center px-0")}
-                    onClick={() => router.push('/game')}
-                >
-                    <Trophy className={cn("w-4 h-4", isOpen && "mr-2")} />
-                    {isOpen && "VocabPoly"}
-                </Button>
-            </div>
-
-            {/* Resources Section */}
-            <div className="flex-1 p-4 overflow-hidden">
-                {isOpen && (
-                    <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4 px-2 animate-fade-in">
-                        Resources
-                    </h4>
-                )}
-                <Accordion type="single" collapsible className="w-full">
-                    <AccordionItem value="resources" className="border-none">
-                        <AccordionTrigger className={cn("hover:no-underline py-2 px-2 rounded-lg hover:bg-accent/10 transition-colors", !isOpen && "justify-center")}>
-                            <div className="flex items-center gap-2">
-                                <BookOpen className="w-4 h-4 text-primary" />
-                                {isOpen && <span>Study Materials</span>}
-                            </div>
-                        </AccordionTrigger>
-                        {isOpen && (
-                            <AccordionContent className="pt-1 pb-0 animate-fade-in">
-                                <div className="flex flex-col space-y-1 ml-4 mt-1 border-l border-border/40 pl-2">
-                                    <Button
-                                        variant="ghost"
-                                        size="sm"
-                                        className="justify-start font-normal h-8"
-                                        onClick={() => router.push('/resources/math')}
-                                    >
-                                        <Calculator className="w-3 h-3 mr-2 text-blue-500" />
-                                        Math
-                                    </Button>
-                                    <Button
-                                        variant="ghost"
-                                        size="sm"
-                                        className="justify-start font-normal h-8"
-                                        onClick={() => router.push('/resources/english')}
-                                    >
-                                        <Languages className="w-3 h-3 mr-2 text-green-500" />
-                                        English
-                                    </Button>
-                                    <Button
-                                        variant="ghost"
-                                        size="sm"
-                                        className="justify-start font-normal h-8"
-                                        onClick={() => router.push('/resources/analytical')}
-                                    >
-                                        <Brain className="w-3 h-3 mr-2 text-purple-500" />
-                                        Analytical
-                                    </Button>
+        <Sidebar collapsible="icon" {...props}>
+            <SidebarHeader>
+                <SidebarMenu>
+                    <SidebarMenuItem>
+                        <SidebarMenuButton size="lg" asChild>
+                            <div className="flex items-center gap-2 cursor-pointer" onClick={() => router.push("/dashboard")}>
+                                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                                    <Zap className="size-4" />
                                 </div>
-                            </AccordionContent>
-                        )}
-                    </AccordionItem>
-                </Accordion>
-            </div>
+                                <div className="grid flex-1 text-left text-sm leading-tight">
+                                    <span className="truncate font-semibold">Sprint IBA</span>
+                                    <span className="truncate text-xs">Student Portal</span>
+                                </div>
+                            </div>
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
+                </SidebarMenu>
+            </SidebarHeader>
+            <SidebarContent>
+                <SidebarGroup>
+                    <SidebarGroupLabel>Platform</SidebarGroupLabel>
+                    <SidebarGroupContent>
+                        <SidebarMenu>
+                            <SidebarMenuItem>
+                                <SidebarMenuButton
+                                    isActive={isActive("/dashboard")}
+                                    tooltip="Dashboard"
+                                    onClick={() => router.push("/dashboard")}
+                                >
+                                    <LayoutDashboard />
+                                    <span>Dashboard</span>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                            <SidebarMenuItem>
+                                <SidebarMenuButton
+                                    isActive={isActive("/study-plan")}
+                                    tooltip="Study Plan"
+                                    onClick={() => router.push("/study-plan")}
+                                >
+                                    <Calendar />
+                                    <span>Study Plan</span>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                        </SidebarMenu>
+                    </SidebarGroupContent>
+                </SidebarGroup>
 
-            {/* Sign Out Section */}
-            <div className="p-4 border-t border-border/40">
-                <Button
-                    variant="ghost"
-                    className={cn("w-full justify-start text-muted-foreground hover:text-destructive hover:bg-destructive/10", !isOpen && "justify-center px-0")}
-                    onClick={handleSignOut}
-                >
-                    <LogOut className={cn("w-4 h-4", isOpen && "mr-2")} />
-                    {isOpen && "Sign Out"}
-                </Button>
-            </div>
-        </div>
-    );
-};
+                <SidebarGroup>
+                    <SidebarGroupLabel>Learning</SidebarGroupLabel>
+                    <SidebarGroupContent>
+                        <SidebarMenu>
+                            <SidebarMenuItem>
+                                <SidebarMenuButton tooltip="Resources">
+                                    <BookOpen />
+                                    <span>Resources</span>
+                                </SidebarMenuButton>
+                                <SidebarMenuSub>
+                                    <SidebarMenuSubItem>
+                                        <SidebarMenuSubButton
+                                            isActive={isActive("/resources/math")}
+                                            onClick={() => router.push("/resources/math")}
+                                        >
+                                            <Calculator />
+                                            <span>Math</span>
+                                        </SidebarMenuSubButton>
+                                    </SidebarMenuSubItem>
+                                    <SidebarMenuSubItem>
+                                        <SidebarMenuSubButton
+                                            isActive={isActive("/resources/english")}
+                                            onClick={() => router.push("/resources/english")}
+                                        >
+                                            <Languages />
+                                            <span>English</span>
+                                        </SidebarMenuSubButton>
+                                    </SidebarMenuSubItem>
+                                    <SidebarMenuSubItem>
+                                        <SidebarMenuSubButton
+                                            isActive={isActive("/resources/analytical")}
+                                            onClick={() => router.push("/resources/analytical")}
+                                        >
+                                            <Brain />
+                                            <span>Analytical</span>
+                                        </SidebarMenuSubButton>
+                                    </SidebarMenuSubItem>
+                                </SidebarMenuSub>
+                            </SidebarMenuItem>
+                        </SidebarMenu>
+                    </SidebarGroupContent>
+                </SidebarGroup>
 
-export default Sidebar;
+                <SidebarGroup>
+                    <SidebarGroupLabel>Gamification</SidebarGroupLabel>
+                    <SidebarGroupContent>
+                        <SidebarMenu>
+                            <SidebarMenuItem>
+                                <SidebarMenuButton
+                                    isActive={isActive("/vocabpoly")}
+                                    tooltip="VocabPoly"
+                                    onClick={() => router.push("/vocabpoly")}
+                                >
+                                    <Gamepad2 />
+                                    <span>VocabPoly</span>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                            <SidebarMenuItem>
+                                <SidebarMenuButton
+                                    isActive={isActive("/game")}
+                                    tooltip="Leaderboard"
+                                    onClick={() => router.push("/game")}
+                                >
+                                    <Trophy />
+                                    <span>Leaderboard</span>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                        </SidebarMenu>
+                    </SidebarGroupContent>
+                </SidebarGroup>
+
+                <SidebarGroup>
+                    <SidebarGroupLabel>Community</SidebarGroupLabel>
+                    <SidebarGroupContent>
+                        <SidebarMenu>
+                            <SidebarMenuItem>
+                                <SidebarMenuButton
+                                    isActive={isActive("/friends")}
+                                    tooltip="Friends"
+                                    onClick={() => router.push("/friends")}
+                                >
+                                    <Users />
+                                    <span>Friends</span>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                        </SidebarMenu>
+                    </SidebarGroupContent>
+                </SidebarGroup>
+            </SidebarContent>
+            <SidebarFooter>
+                <SidebarMenu>
+                    <SidebarMenuItem>
+                        <SidebarMenuButton
+                            onClick={() => router.push("/profile")}
+                            isActive={isActive("/profile")}
+                            tooltip="Profile"
+                        >
+                            <User />
+                            <span>Profile</span>
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
+                    <SidebarMenuItem>
+                        <SidebarMenuButton
+                            onClick={handleSignOut}
+                            className="text-destructive hover:text-destructive"
+                            tooltip="Sign Out"
+                        >
+                            <LogOut />
+                            <span>Sign Out</span>
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
+                </SidebarMenu>
+            </SidebarFooter>
+            <SidebarRail />
+        </Sidebar>
+    )
+}

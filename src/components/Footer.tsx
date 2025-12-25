@@ -26,7 +26,7 @@ const Footer = () => {
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li><a href="#" className="hover:text-accent transition-colors">Games</a></li>
               <li><a href="#" className="hover:text-accent transition-colors">Leaderboard</a></li>
-              <li><a href="#" className="hover:text-accent transition-colors">Community</a></li>
+
               <li><a href="#" className="hover:text-accent transition-colors">Resources</a></li>
             </ul>
           </div>

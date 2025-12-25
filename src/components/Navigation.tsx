@@ -33,9 +33,7 @@ const Navigation = () => {
             <Link href="#leaderboard" className="text-foreground hover:text-accent transition-colors font-medium">
               Leaderboard
             </Link>
-            <Link href="#community" className="text-foreground hover:text-accent transition-colors font-medium">
-              Community
-            </Link>
+
           </div>
 
           {/* CTA Buttons */}
