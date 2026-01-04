@@ -40,217 +40,124 @@ const Dashboard = () => {
     return (
         <div className="container mx-auto px-6 py-8">
             {/* Welcome Section */}
-            <div className="mb-12 animate-fade-in">
-                <h1 className="text-4xl font-bold mb-2">
+            <div className="mb-8 animate-fade-in">
+                <h1 className="text-3xl font-bold mb-2">
                     Welcome back, {user?.user_metadata?.full_name || "Student"}!
                 </h1>
-                <p className="text-muted-foreground text-lg">Ready to sprint towards your IBA goals?</p>
+                <p className="text-muted-foreground">Ready to sprint towards your IBA goals?</p>
             </div>
 
-            {/* Stats Overview */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
-                {/* Current Level Card */}
-                <Card className="border-border/40 card-hover-glow">
-                    <CardHeader>
-                        <div className="flex items-center justify-between">
-                            <CardTitle className="text-lg">Current Level</CardTitle>
-                            <Trophy className="w-5 h-5 text-accent" />
-                        </div>
-                    </CardHeader>
-                    <CardContent>
-                        {loadingVP ? (
-                            <div className="space-y-3">
-                                <div className="flex items-center gap-3">
-                                    <div className="w-16 h-16 rounded-full skeleton" />
-                                    <div className="flex-1 space-y-2">
-                                        <div className="h-6 w-32 skeleton" />
-                                        <div className="h-4 w-24 skeleton" />
-                                    </div>
-                                </div>
-                            </div>
-                        ) : (
-                            <div className="flex items-center gap-3">
-                                <LevelBadge level={currentLevel} size="md" />
-                                <div>
-                                    <p className="text-xl font-bold gradient-text">{currentLevel.name}</p>
-                                    <p className="text-xs text-muted-foreground mt-1">{currentLevel.track.replace(/_/g, ' ')}</p>
-                                </div>
-                            </div>
-                        )}
-                    </CardContent>
-                </Card>
-
-                {/* Velocity Points Card */}
-                <Card className="border-border/40 card-hover-glow">
-                    <CardHeader>
-                        <div className="flex items-center justify-between">
-                            <CardTitle className="text-lg">Velocity Points</CardTitle>
-                            <img src="/assets/velocity-coin.png" alt="VP" className="w-5 h-5 object-contain" />
-                        </div>
-                    </CardHeader>
-                    <CardContent>
-                        {loadingVP ? (
-                            <div className="space-y-2">
-                                <div className="h-10 w-40 skeleton" />
-                                <div className="h-4 w-28 skeleton" />
-                            </div>
-                        ) : (
-                            <>
-                                <p className="text-3xl font-bold gradient-text">
-                                    {formatVPFull(totalVp)}
-                                </p>
-                                <p className="text-sm text-muted-foreground mt-1">Total VP earned</p>
-                            </>
-                        )}
-                    </CardContent>
-                </Card>
-
-                {/* Study Streak Card */}
-                <Card className="border-border/40 card-hover-glow">
-                    <CardHeader>
-                        <div className="flex items-center justify-between">
-                            <CardTitle className="text-lg">Study Streak</CardTitle>
-                            <Zap className="w-5 h-5 text-accent" />
-                        </div>
-                    </CardHeader>
-                    <CardContent>
-                        <p className="text-3xl font-bold gradient-text">7 Days</p>
-                        <p className="text-sm text-muted-foreground mt-1">+500 VP per day!</p>
-                    </CardContent>
-                </Card>
-            </div>
-
-            {/* Track Progress Section */}
-            <div className="mb-12 animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
-                {!loadingVP && (
-                    <TrackProgress totalVp={totalVp} currentLevel={currentLevel} />
-                )}
-            </div>
-
-            {/* Dashboard Widgets */}
-            <DashboardWidgets />
-
-            {/* Featured: Practice & Exams */}
-            <div className="mb-12 animate-fade-in-up" style={{ animationDelay: "0.25s" }}>
-                <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
-                    <Sparkles className="w-6 h-6 text-accent" />
-                    Featured
+            {/* Quick Actions Grid */}
+            <div className="mb-12 animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
+                <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
+                    <Zap className="w-5 h-5 text-accent" />
+                    Quick Actions
                 </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {/* Practice Mode */}
                     <Card
-                        className="border-2 border-primary/30 bg-gradient-to-br from-primary/5 to-accent/5 cursor-pointer group hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/10"
+                        className="h-full border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-transparent cursor-pointer group hover:border-primary/50 transition-all hover:shadow-lg hover:shadow-primary/5 flex flex-col"
                         onClick={() => router.push("/practice")}
                     >
-                        <CardHeader>
-                            <div className="flex items-center gap-4">
-                                <div className="w-14 h-14 rounded-xl gradient-primary flex items-center justify-center shadow-lg">
-                                    <ClipboardList className="w-7 h-7 text-primary-foreground" />
+                        <CardHeader className="pb-3 flex-1">
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-lg gradient-primary flex items-center justify-center shadow-md shrink-0">
+                                    <ClipboardList className="w-5 h-5 text-primary-foreground" />
                                 </div>
                                 <div>
-                                    <CardTitle className="text-xl">Practice Mode</CardTitle>
-                                    <CardDescription className="text-base">Master topics at your own pace</CardDescription>
+                                    <CardTitle className="text-lg">Practice Mode</CardTitle>
+                                    <CardDescription className="line-clamp-2">Master topics at your pace</CardDescription>
                                 </div>
                             </div>
                         </CardHeader>
-                        <CardContent>
-                            <div className="flex flex-wrap gap-2 mb-4">
-                                <span className="px-3 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary">Math</span>
-                                <span className="px-3 py-1 rounded-full text-xs font-medium bg-accent/10 text-accent">English</span>
-                                <span className="px-3 py-1 rounded-full text-xs font-medium bg-destructive/10 text-destructive">Analytical</span>
-                            </div>
-                            <Button className="w-full btn-hover-glow gradient-primary group-hover:scale-[1.02] transition-transform">
-                                <Brain className="w-5 h-5 mr-2" />
+                        <CardContent className="pt-0 mt-auto">
+                            <Button className="w-full h-9 text-sm btn-hover-glow gradient-primary group-hover:scale-[1.02] transition-transform">
                                 Start Practice
                             </Button>
                         </CardContent>
                     </Card>
 
+                    {/* Exams */}
                     <Card
-                        className="border-2 border-accent/30 bg-gradient-to-br from-accent/5 to-primary/5 cursor-pointer group hover:border-accent/50 transition-all hover:shadow-xl hover:shadow-accent/10"
+                        className="h-full border-2 border-accent/20 bg-gradient-to-br from-accent/5 to-transparent cursor-pointer group hover:border-accent/50 transition-all hover:shadow-lg hover:shadow-accent/5 flex flex-col"
                         onClick={() => router.push("/exams")}
                     >
-                        <CardHeader>
-                            <div className="flex items-center gap-4">
-                                <div className="w-14 h-14 rounded-xl gradient-accent flex items-center justify-center shadow-lg">
-                                    <FileText className="w-7 h-7 text-primary-foreground" />
+                        <CardHeader className="pb-3 flex-1">
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-lg gradient-accent flex items-center justify-center shadow-md shrink-0">
+                                    <FileText className="w-5 h-5 text-primary-foreground" />
                                 </div>
                                 <div>
-                                    <CardTitle className="text-xl">Exams</CardTitle>
-                                    <CardDescription className="text-base">Mock tests & live competitions</CardDescription>
+                                    <CardTitle className="text-lg">Exams</CardTitle>
+                                    <CardDescription className="line-clamp-2">Mock tests & live exams</CardDescription>
                                 </div>
                             </div>
                         </CardHeader>
-                        <CardContent>
-                            <div className="flex flex-wrap gap-2 mb-4">
-                                <span className="px-3 py-1 rounded-full text-xs font-medium bg-green-500/10 text-green-600">Mock Exams</span>
-                                <span className="px-3 py-1 rounded-full text-xs font-medium bg-blue-500/10 text-blue-600">Live Exams</span>
-                                <span className="px-3 py-1 rounded-full text-xs font-medium bg-yellow-500/10 text-yellow-600">Leaderboard</span>
-                            </div>
-                            <Button className="w-full btn-hover-glow gradient-accent group-hover:scale-[1.02] transition-transform">
-                                <Trophy className="w-5 h-5 mr-2" />
+                        <CardContent className="pt-0 mt-auto">
+                            <Button className="w-full h-9 text-sm btn-hover-glow gradient-accent group-hover:scale-[1.02] transition-transform">
                                 View Exams
                             </Button>
                         </CardContent>
                     </Card>
-                </div>
-            </div>
 
-            {/* Quick Actions */}
-            <div className="mb-12 animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
-                <h2 className="text-2xl font-bold mb-6">Quick Actions</h2>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <Card className="border-border/40 card-hover-glow cursor-pointer group" onClick={() => router.push("/vocabpoly")}>
-                        <CardHeader>
+                    {/* VocabPoly */}
+                    <Card
+                        className="h-full border-border/40 cursor-pointer group hover:border-primary/30 transition-all hover:shadow-md flex flex-col"
+                        onClick={() => router.push("/vocabpoly")}
+                    >
+                        <CardHeader className="pb-3 flex-1">
                             <div className="flex items-center gap-3">
-                                <div className="w-12 h-12 rounded-lg gradient-accent flex items-center justify-center">
-                                    <Sparkles className="w-6 h-6 text-primary-foreground" />
+                                <div className="w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center text-purple-500 shrink-0">
+                                    <Sparkles className="w-5 h-5" />
                                 </div>
                                 <div>
-                                    <CardTitle>VocabPoly</CardTitle>
-                                    <CardDescription>Master vocabulary through engaging challenges</CardDescription>
+                                    <CardTitle className="text-lg">VocabPoly</CardTitle>
+                                    <CardDescription className="line-clamp-2">Gamified vocabulary</CardDescription>
                                 </div>
                             </div>
                         </CardHeader>
-                        <CardContent>
-                            <Button className="w-full btn-hover-glow gradient-primary">
-                                Start Game
+                        <CardContent className="pt-0 mt-auto">
+                            <Button variant="outline" className="w-full h-9 text-sm group-hover:bg-primary/5 group-hover:text-primary group-hover:border-primary/30">
+                                Play Now
                             </Button>
                         </CardContent>
                     </Card>
 
-                    <Card className="border-border/40 card-hover-glow cursor-pointer group">
-                        <CardHeader>
+                    {/* Vocab Sprint */}
+                    <Card className="h-full border-border/40 cursor-pointer group hover:border-primary/30 transition-all hover:shadow-md flex flex-col">
+                        <CardHeader className="pb-3 flex-1">
                             <div className="flex items-center gap-3">
-                                <div className="w-12 h-12 rounded-lg gradient-accent flex items-center justify-center">
-                                    <BookOpen className="w-6 h-6 text-primary-foreground" />
+                                <div className="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-500 shrink-0">
+                                    <BookOpen className="w-5 h-5" />
                                 </div>
                                 <div>
-                                    <CardTitle>Vocab Sprint</CardTitle>
-                                    <CardDescription>Test your vocabulary skills</CardDescription>
+                                    <CardTitle className="text-lg">Vocab Sprint</CardTitle>
+                                    <CardDescription className="line-clamp-2">Test your word power</CardDescription>
                                 </div>
                             </div>
                         </CardHeader>
-                        <CardContent>
-                            <Button className="w-full btn-hover-glow gradient-primary">
+                        <CardContent className="pt-0 mt-auto">
+                            <Button variant="outline" className="w-full h-9 text-sm group-hover:bg-primary/5 group-hover:text-primary group-hover:border-primary/30">
                                 Start Sprint
                             </Button>
                         </CardContent>
                     </Card>
 
-                    <Card className="border-border/40 card-hover-glow cursor-pointer group">
-                        <CardHeader>
+                    {/* Math Sprint */}
+                    <Card className="h-full border-border/40 cursor-pointer group hover:border-primary/30 transition-all hover:shadow-md flex flex-col">
+                        <CardHeader className="pb-3 flex-1">
                             <div className="flex items-center gap-3">
-                                <div className="w-12 h-12 rounded-lg gradient-accent flex items-center justify-center">
-                                    <Target className="w-6 h-6 text-primary-foreground" />
+                                <div className="w-10 h-10 rounded-lg bg-orange-500/10 flex items-center justify-center text-orange-500 shrink-0">
+                                    <Target className="w-5 h-5" />
                                 </div>
                                 <div>
-                                    <CardTitle>Math Sprint</CardTitle>
-                                    <CardDescription>Sharpen your math abilities</CardDescription>
+                                    <CardTitle className="text-lg">Math Sprint</CardTitle>
+                                    <CardDescription className="line-clamp-2">Sharpen math skills</CardDescription>
                                 </div>
                             </div>
                         </CardHeader>
-                        <CardContent>
-                            <Button className="w-full btn-hover-glow gradient-primary">
+                        <CardContent className="pt-0 mt-auto">
+                            <Button variant="outline" className="w-full h-9 text-sm group-hover:bg-primary/5 group-hover:text-primary group-hover:border-primary/30">
                                 Start Sprint
                             </Button>
                         </CardContent>
@@ -258,14 +165,28 @@ const Dashboard = () => {
                 </div>
             </div>
 
-            {/* Daily Goals */}
-            <div className="animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
-                <DailyGoals />
+            {/* Daily Goals & Progress */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12 animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
+                <div className="lg:col-span-2 h-full">
+                    <DailyGoals className="h-full" />
+                </div>
+
+                {/* Track Progress - Moved to sidebar */}
+                <div className="space-y-6 h-full">
+                    {!loadingVP && (
+                        <TrackProgress totalVp={totalVp} currentLevel={currentLevel} className="h-full" />
+                    )}
+                </div>
+            </div>
+
+            {/* Dashboard Widgets (Study Progress, Tasks, Activity) - Full Width */}
+            <div className="mb-12">
+                <DashboardWidgets />
             </div>
 
             {/* Subject Mastery */}
-            <div className="animate-fade-in-up" style={{ animationDelay: "0.4s" }}>
-                <h2 className="text-2xl font-bold mb-6 mt-12">Subject Mastery</h2>
+            <div className="animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
+                <h2 className="text-xl font-bold mb-6">Subject Mastery</h2>
                 <SubjectMastery />
             </div>
 

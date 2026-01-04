@@ -13,7 +13,11 @@ interface Goal {
     done: boolean;
 }
 
-const DailyGoals = () => {
+interface DailyGoalsProps {
+    className?: string;
+}
+
+const DailyGoals = ({ className }: DailyGoalsProps) => {
     const [goals, setGoals] = useState<Goal[]>([
         { id: 1, text: "Complete 1 Vocab Sprint", done: false },
         { id: 2, text: "Solve 5 Math Problems", done: false },
@@ -57,7 +61,7 @@ const DailyGoals = () => {
     };
 
     return (
-        <Card className="border-border/40">
+        <Card className={`border-border/40 h-full ${className}`}>
             <CardHeader>
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">

@@ -25,6 +25,10 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useRouter } from "next/navigation";
+import { useVelocityPoints } from "@/hooks/useVelocityPoints";
+import LevelBadge from "@/components/badges/LevelBadge";
+import { formatVPFull } from "@/utils/vpCalculations";
+import { Zap } from "lucide-react";
 
 const Header = () => {
     const pathname = usePathname();
@@ -32,6 +36,12 @@ const Header = () => {
     const router = useRouter();
 
     const pathSegments = pathname.split('/').filter(Boolean);
+
+    const {
+        totalVp,
+        currentLevel,
+        loading: loadingVP,
+    } = useVelocityPoints();
 
     const handleSignOut = async () => {
         await signOut();
@@ -70,25 +80,61 @@ const Header = () => {
                 </Breadcrumb>
             </div>
 
-            <div className="ml-auto flex items-center gap-4">
-                <div className="relative hidden md:block w-64">
+            {/* Center Search */}
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden md:block w-full max-w-md px-4">
+                <div className="relative">
                     <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                     <Input
                         type="search"
                         placeholder="Search..."
-                        className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[300px]"
+                        className="w-full rounded-full bg-background/50 border-border/50 focus:bg-background transition-all pl-9"
                     />
                 </div>
+            </div>
 
-                <Button variant="ghost" size="icon" className="relative">
-                    <Bell className="h-5 w-5" />
-                    <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-red-500" />
-                </Button>
+            <div className="ml-auto flex items-center gap-4">
+                {/* User Stats - Clean & Consistent */}
+                {!loadingVP && user && (
+                    <div className="hidden md:flex items-center gap-6 mx-2">
+                        {/* Level */}
+                        <div className="flex items-center gap-3">
+                            <LevelBadge level={currentLevel} size="sm" />
+                            <div className="flex flex-col">
+                                <span className="text-sm font-semibold leading-none">{currentLevel.name}</span>
+                                <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider mt-0.5">{currentLevel.track.replace(/_/g, ' ')}</span>
+                            </div>
+                        </div>
+
+                        <div className="h-8 w-px bg-border/60" />
+
+                        {/* VP */}
+                        <div className="flex items-center gap-2" title="Velocity Points">
+                            <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                                <img src="/assets/velocity-coin.png" alt="VP" className="w-4 h-4 object-contain" />
+                            </div>
+                            <div className="flex flex-col">
+                                <span className="text-sm font-bold leading-none">{formatVPFull(totalVp)}</span>
+                                <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider mt-0.5">VP</span>
+                            </div>
+                        </div>
+
+                        {/* Streak */}
+                        <div className="flex items-center gap-2" title="Daily Streak">
+                            <div className="w-8 h-8 rounded-full bg-orange-500/10 flex items-center justify-center">
+                                <Zap className="w-4 h-4 text-orange-500 fill-orange-500" />
+                            </div>
+                            <div className="flex flex-col">
+                                <span className="text-sm font-bold leading-none">7</span>
+                                <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider mt-0.5">Day Streak</span>
+                            </div>
+                        </div>
+                    </div>
+                )}
 
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                            <Avatar className="h-8 w-8">
+                        <Button variant="ghost" className="relative h-9 w-9 rounded-full ring-2 ring-primary/10 hover:ring-primary/20 transition-all" suppressHydrationWarning>
+                            <Avatar className="h-9 w-9">
                                 <AvatarImage src={user?.user_metadata?.avatar_url} alt={user?.user_metadata?.full_name} />
                                 <AvatarFallback>{user?.user_metadata?.full_name?.charAt(0) || "U"}</AvatarFallback>
                             </Avatar>
@@ -116,6 +162,11 @@ const Header = () => {
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
+
+                <Button variant="ghost" size="icon" className="relative">
+                    <Bell className="h-5 w-5" />
+                    <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-red-500" />
+                </Button>
             </div>
         </header>
     );
