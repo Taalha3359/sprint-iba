@@ -88,7 +88,6 @@ export function usePractice() {
             let query = supabase
                 .from('questions')
                 .select('*')
-                .eq('is_verified', true);
 
             // Filter by subjects/topics
             if (config.subjects.length > 0 && !config.subjects.includes('Overall')) {
@@ -169,11 +168,15 @@ export function usePractice() {
         } as any);
 
         // Update user_progress to track this question as answered
-        await supabase.from('user_progress').upsert({
+        const { error: progressError } = await supabase.from('user_progress').upsert({
             user_id: user.id,
             question_id: currentQuestion.id,
             is_correct: isCorrect,
         } as any, { onConflict: 'user_id,question_id' });
+
+        if (progressError) {
+            console.error('Error updating user progress:', progressError);
+        }
 
         // Update local state
         setState(prev => ({

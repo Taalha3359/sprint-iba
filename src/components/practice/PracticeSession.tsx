@@ -45,7 +45,7 @@ export default function PracticeSession({
 }: PracticeSessionProps) {
     const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
     const [hasAnswered, setHasAnswered] = useState(false);
-    const [startTime] = useState(Date.now());
+    const [startTime, setStartTime] = useState(Date.now());
 
     // Timer for timed mode
     useEffect(() => {
@@ -67,6 +67,7 @@ export default function PracticeSession({
     useEffect(() => {
         setSelectedAnswer(null);
         setHasAnswered(false);
+        setStartTime(Date.now());
         if (mode === 'timed') {
             setTimeRemaining(timePerQuestion);
         }
@@ -75,15 +76,20 @@ export default function PracticeSession({
     const handleSelectAnswer = (answer: string) => {
         if (hasAnswered) return;
         setSelectedAnswer(answer);
-    };
-
-    const handleSubmitAnswer = useCallback(() => {
-        if (!selectedAnswer || hasAnswered) return;
 
         const timeTaken = Math.floor((Date.now() - startTime) / 1000);
-        onAnswer(selectedAnswer, timeTaken);
+        onAnswer(answer, timeTaken);
         setHasAnswered(true);
-    }, [selectedAnswer, hasAnswered, startTime, onAnswer]);
+
+        // Auto-advance after a short delay
+        setTimeout(() => {
+            if (questionNumber >= totalQuestions) {
+                onComplete();
+            } else {
+                onNext();
+            }
+        }, 800);
+    };
 
     const handleNext = () => {
         if (questionNumber >= totalQuestions) {
@@ -94,7 +100,7 @@ export default function PracticeSession({
     };
 
     const options = question.options || [];
-    const optionLabels = ['A', 'B', 'C', 'D'];
+    const optionLabels = ['A', 'B', 'C', 'D', 'E'];
 
     const progress = (questionNumber / totalQuestions) * 100;
 
@@ -199,30 +205,18 @@ export default function PracticeSession({
             <div className="flex gap-4">
                 {!hasAnswered ? (
                     <Button
-                        onClick={handleSubmitAnswer}
-                        disabled={!selectedAnswer}
-                        className="flex-1 h-12 gradient-primary"
+                        variant="ghost"
+                        onClick={handleNext}
+                        className="flex-1 h-12 text-muted-foreground hover:text-primary"
                     >
-                        <CheckCircle className="w-5 h-5 mr-2" />
-                        Submit Answer
+                        Skip Question
+                        <ArrowRight className="w-4 h-4 ml-2" />
                     </Button>
                 ) : (
-                    <Button
-                        onClick={handleNext}
-                        className="flex-1 h-12 gradient-primary"
-                    >
-                        {questionNumber >= totalQuestions ? (
-                            <>
-                                <Flag className="w-5 h-5 mr-2" />
-                                Finish Practice
-                            </>
-                        ) : (
-                            <>
-                                <ArrowRight className="w-5 h-5 mr-2" />
-                                Next Question
-                            </>
-                        )}
-                    </Button>
+                    <div className="flex-1 h-12 flex items-center justify-center text-primary font-medium animate-pulse">
+                        <CheckCircle className="w-5 h-5 mr-2" />
+                        Recording answer...
+                    </div>
                 )}
             </div>
         </div>

@@ -3,11 +3,35 @@ import { InlineMath } from 'react-katex';
 import React from 'react';
 
 // Helper to render text with LaTeX and basic Markdown
-export const MarkdownText = ({ text }: { text: string }) => {
-    if (!text) return null;
+export const MarkdownText = ({ text }: { text: any }) => {
+    if (text === null || text === undefined) return null;
+
+    let stringText = "";
+    if (typeof text !== 'string') {
+        if (typeof text === 'number' || typeof text === 'boolean') {
+            stringText = String(text);
+        } else if (typeof text === 'object') {
+            // Handle specific object structures like { text: "..." } or { id: "A", text: "..." }
+            if (text.text && typeof text.text === 'string') {
+                stringText = text.text;
+            } else {
+                try {
+                    stringText = JSON.stringify(text);
+                } catch (e) {
+                    return null;
+                }
+            }
+        } else {
+            stringText = String(text);
+        }
+    } else {
+        stringText = text;
+    }
+
+    if (!stringText) return null;
 
     // Split into lines to handle structure better
-    const lines = text.split('\n');
+    const lines = stringText.split('\n');
     const elements: React.ReactNode[] = [];
 
     let currentList: React.ReactNode[] = [];

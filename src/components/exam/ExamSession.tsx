@@ -89,7 +89,7 @@ export default function ExamSession({
     const progress = (answeredCount / questions.length) * 100;
 
     const options = currentQuestion?.options || [];
-    const optionLabels = ['A', 'B', 'C', 'D'];
+    const optionLabels = ['A', 'B', 'C', 'D', 'E'];
     const selectedAnswer = answers[currentQuestion?.id];
 
     const handleSelectAnswer = (label: string) => {

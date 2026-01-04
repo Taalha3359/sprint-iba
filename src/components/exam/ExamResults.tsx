@@ -257,7 +257,7 @@ export default function ExamResults({
 
                                                             <div className="space-y-2">
                                                                 {(question.options || []).map((option, optIndex) => {
-                                                                    const label = ['A', 'B', 'C', 'D'][optIndex];
+                                                                    const label = ['A', 'B', 'C', 'D', 'E'][optIndex];
                                                                     const isUserAnswer = userAnswer === label;
                                                                     const isCorrectAnswer = question.correct_answer === label;
 
