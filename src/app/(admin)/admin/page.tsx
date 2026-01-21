@@ -10,7 +10,8 @@ import {
     ArrowUpRight,
     ArrowDownRight,
     BrainCircuit,
-    BookOpen
+    BookOpen,
+    Settings
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
