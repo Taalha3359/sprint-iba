@@ -39,10 +39,10 @@ import "@uiw/react-markdown-preview/markdown.css";
 export default function QuestionExtractor() {
     // Extraction state
     const [file, setFile] = useState<File | null>(null);
-    const [pagesPerChunk, setPagesPerChunk] = useState(3);
+    const [pagesPerChunk, setPagesPerChunk] = useState(2);
     const [startPage, setStartPage] = useState<number | undefined>(undefined);
     const [endPage, setEndPage] = useState<number | undefined>(undefined);
-    const [selectedModel, setSelectedModel] = useState<string>('gemini-1.5-flash');
+    const [selectedModel, setSelectedModel] = useState<string>('gemini-2.5-flash');
 
     const { extract, stop, progress, isProcessing } = useQuestionExtraction();
     const {
